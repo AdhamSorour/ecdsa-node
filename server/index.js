@@ -23,8 +23,12 @@ app.post("/send", (req, res) => {
 
   setInitialBalance(sender);
   setInitialBalance(recipient);
-
-  if (balances[sender] < amount) {
+  
+  if (amount < 1) {
+    res.status(400).send({ message: "Enter a positive amount!\nCheeky bastard ;)" });
+  } else if (!recipient.startsWith('0x') || recipient.length < 3) {
+    res.status(400).send({ message: "Invalid address!" });
+  } else if (balances[sender] < amount) {
     res.status(400).send({ message: "Not enough funds!" });
   } else {
     balances[sender] -= amount;
